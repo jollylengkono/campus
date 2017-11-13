@@ -3,6 +3,8 @@ import { NavController, AlertController, ActionSheetController } from 'ionic-ang
 
 import { AngularFireDatabase, AngularFireList } from 'angularfire2/database';
 import { Observable } from 'rxjs/Observable';
+import { AuthProvider } from '../../providers/auth/auth';
+import { LoginPage } from '../login/login';
 
 
 @Component({
@@ -15,7 +17,7 @@ export class HomePage {
   courses: Observable<any[]>;
 
   constructor(public navCtrl: NavController, public alertCtrl: AlertController,
-    public actionSheetCtrl: ActionSheetController, db: AngularFireDatabase) {
+    public actionSheetCtrl: ActionSheetController, db: AngularFireDatabase, public authProvider: AuthProvider) {
     this.coursesRef = db.list('courses');
     this.courses = this.coursesRef.snapshotChanges().map(changes => {
       return changes.map(c => ({ key: c.payload.key, ...c.payload.val() }));
@@ -106,6 +108,12 @@ export class HomePage {
       ]
     });
     prompt.present();
+  }
+
+  logoutUser() {
+    this.authProvider.logoutUser().then(() => {
+      this.navCtrl.setRoot(LoginPage);
+    })
   }
 
 }
