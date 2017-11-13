@@ -13,7 +13,7 @@ import { LoginPage } from '../login/login';
 })
 export class HomePage {
 
-  coursesRef: AngularFireList<any[]>;
+  coursesRef: AngularFireList<any>;
   courses: Observable<any[]>;
 
   constructor(public navCtrl: NavController, public alertCtrl: AlertController,
