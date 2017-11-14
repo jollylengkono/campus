@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { NavController, AlertController, ActionSheetController } from 'ionic-angular';
 
 import { AngularFireDatabase, AngularFireList } from 'angularfire2/database';
+import { AngularFirestore, AngularFirestoreCollection } from 'angularfire2/firestore';
 import { Observable } from 'rxjs/Observable';
 import { AuthProvider } from '../../providers/auth/auth';
 import { LoginPage } from '../login/login';
@@ -13,14 +14,18 @@ import { LoginPage } from '../login/login';
 })
 export class HomePage {
 
-  coursesRef: AngularFireList<any>;
+  coursesRef: AngularFirestoreCollection<any>;
   courses: Observable<any[]>;
 
   constructor(public navCtrl: NavController, public alertCtrl: AlertController,
-    public actionSheetCtrl: ActionSheetController, db: AngularFireDatabase, public authProvider: AuthProvider) {
-    this.coursesRef = db.list('courses');
+    public actionSheetCtrl: ActionSheetController, db: AngularFireDatabase, private afs: AngularFirestore, public authProvider: AuthProvider) {
+    this.coursesRef = this.afs.collection<any>('courses');
     this.courses = this.coursesRef.snapshotChanges().map(changes => {
-      return changes.map(c => ({ key: c.payload.key, ...c.payload.val() }));
+      return changes.map(c => {
+        const data = c.payload.doc.data();
+        const id = c.payload.doc.id;
+        return { id, ...data }
+      });
     });
   }
 
@@ -44,7 +49,7 @@ export class HomePage {
         {
           text: 'Save',
           handler: data => {
-            this.coursesRef.push({title: data.title});
+            this.coursesRef.add({title: data.title});
           }
         }
       ]
@@ -60,7 +65,7 @@ export class HomePage {
           text: 'Delete Course',
           role: 'destructive',
           handler: () => {
-            this.coursesRef.remove(courseKey);
+            this.coursesRef.doc(courseKey).delete();
           }
         },
         {
@@ -102,7 +107,7 @@ export class HomePage {
         {
           text: 'Save',
           handler: data => {
-            this.coursesRef.update(courseKey, {title: data.title});
+            this.coursesRef.doc(courseKey).update({title: data.title});
           }
         }
       ]
