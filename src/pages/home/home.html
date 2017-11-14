@@ -1,22 +1,12 @@
 <ion-header>
   <ion-navbar>
+    <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
     <ion-title>
-      <ion-buttons end>
-        <button ion-button icon-only (click)="addCourse()">
-          <ion-icon name="add"></ion-icon>
-        </button>
-        <button ion-button icon-only (click)="logoutUser()">
-          <ion-icon name="exit" alt></ion-icon>
-        </button>
-      </ion-buttons>
+      Home
     </ion-title>
   </ion-navbar>
 </ion-header>
 
-<ion-content padding>
-  <ion-list>
-    <ion-item *ngFor="let course of courses | async" (click)="showOptions(course.key, course.title)">
-      {{ course.title }}
-    </ion-item>
-  </ion-list>
-</ion-content>
+<ion-content padding></ion-content>
