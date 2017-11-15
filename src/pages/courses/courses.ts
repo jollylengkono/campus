@@ -29,12 +29,16 @@ export class CoursesPage {
 
   addCourse() {
     let prompt = this.alertCtrl.create({
-      title: '',
-      message: "Enter Course name",
+      title: 'Add Course',
+      message: '',
       inputs: [
         {
+          name: 'course_id',
+          placeholder: 'Course ID'
+        },
+        {
           name: 'title',
-          placeholder: 'Title'
+          placeholder: 'Course Title'
         },
       ],
       buttons: [
@@ -47,7 +51,7 @@ export class CoursesPage {
         {
           text: 'Save',
           handler: data => {
-            this.coursesRef.add({title: data.title});
+            this.coursesRef.add({course_id: data.course_id, title: data.title});
           }
         }
       ]
@@ -55,7 +59,7 @@ export class CoursesPage {
     prompt.present();
   }
 
-  showOptions(courseKey, courseTitle) {
+  showOptions(docId, courseId, courseTitle) {
     let actionSheet  = this.actionSheetCtrl.create({
       title: '',
       buttons: [
@@ -63,13 +67,13 @@ export class CoursesPage {
           text: 'Delete Course',
           role: 'destructive',
           handler: () => {
-            this.coursesRef.doc(courseKey).delete();
+            this.coursesRef.doc(docId).delete();
           }
         },
         {
           text: 'Update Course',
           handler: () => {
-            this.updateCourse(courseKey, courseTitle);
+            this.updateCourse(docId, courseId, courseTitle);
           }
         },
         {
@@ -84,11 +88,16 @@ export class CoursesPage {
     actionSheet.present();
   }
 
-  updateCourse(courseKey, courseTitle) {
+  updateCourse(docId, courseId, courseTitle) {
     let prompt = this.alertCtrl.create({
-      title: '',
-      message: 'Update Course',
+      title: 'Update Course',
+      message: '',
       inputs: [
+        {
+          name: 'course_id',
+          placeholder: 'Course ID',
+          value: courseId
+        },
         {
           name: 'title',
           placeholder: 'Course Title',
@@ -105,7 +114,7 @@ export class CoursesPage {
         {
           text: 'Save',
           handler: data => {
-            this.coursesRef.doc(courseKey).update({title: data.title});
+            this.coursesRef.doc(docId).update({title: data.title});
           }
         }
       ]
