@@ -11,6 +11,9 @@
       <ion-item color="none" menuClose="" on-click="goToHome()" id="menu-list-item1">
         Home
       </ion-item>
+      <ion-item color="none" menuClose="" on-click="goToMyCourses()" id="menu-list-item1">
+        My Courses
+      </ion-item>
       <ion-item color="none" menuClose="" on-click="goToAdministration()" id="menu-list-item2">
         Administration
       </ion-item>
@@ -18,7 +21,7 @@
         Courses
       </ion-item>
     </ion-list>
-    <button id="menu-button1" menuClose="" (click)="logoutUser()" ion-button color="assertive" block small style="font-weight:500;border-radius:0px 0px 0px 0px;">
+    <button id="menu-button1" menuClose="" (click)="logoutUser()" ion-button color="danger" block small style="font-weight:500;border-radius:0px 0px 0px 0px;">
       Log Out
     </button>
   </ion-content>

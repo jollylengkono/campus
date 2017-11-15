@@ -1,0 +1,26 @@
+<!--
+  Generated template for the MyCoursesPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+  <ion-navbar>
+    <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title>
+      My Courses
+    </ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding>
+  <ion-list>
+    <div *ngFor="let myCourse of myCourses | async">
+      <ion-item *ngFor="let course_name of myCourse.courses" (click)="showOptions(myCourse.id, course_name)">
+        {{ course_name }}
+      </ion-item>
+    </div>
+  </ion-list>
+</ion-content>

@@ -7,6 +7,7 @@ import { StatusBar } from '@ionic-native/status-bar';
 import { MyApp } from './app.component';
 import { HomePage } from '../pages/home/home';
 import { CoursesPage } from '../pages/courses/courses';
+import { MyCoursesPage } from '../pages/my-courses/my-courses';
 
 import { AngularFireModule } from 'angularfire2';
 import { AngularFirestoreModule } from 'angularfire2/firestore';
@@ -27,7 +28,8 @@ export const firebaseConfig = {
   declarations: [
     MyApp,
     HomePage,
-    CoursesPage
+    CoursesPage,
+    MyCoursesPage
   ],
   imports: [
     BrowserModule,
@@ -41,7 +43,8 @@ export const firebaseConfig = {
   entryComponents: [
     MyApp,
     HomePage,
-    CoursesPage
+    CoursesPage,
+    MyCoursesPage
   ],
   providers: [
     StatusBar,
