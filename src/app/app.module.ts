@@ -8,6 +8,7 @@ import { MyApp } from './app.component';
 import { HomePage } from '../pages/home/home';
 import { CoursesPage } from '../pages/courses/courses';
 import { MyCoursesPage } from '../pages/my-courses/my-courses';
+import { LoginPage } from '../pages/login/login';
 
 import { AngularFireModule } from 'angularfire2';
 import { AngularFirestoreModule } from 'angularfire2/firestore';
@@ -29,7 +30,8 @@ export const firebaseConfig = {
     MyApp,
     HomePage,
     CoursesPage,
-    MyCoursesPage
+    MyCoursesPage,
+    LoginPage
   ],
   imports: [
     BrowserModule,
@@ -44,7 +46,8 @@ export const firebaseConfig = {
     MyApp,
     HomePage,
     CoursesPage,
-    MyCoursesPage
+    MyCoursesPage,
+    LoginPage
   ],
   providers: [
     StatusBar,

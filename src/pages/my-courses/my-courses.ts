@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, AlertController, ActionSheetController } from 'ionic-angular';
+import { IonicPage, NavController, ActionSheetController } from 'ionic-angular';
 import { AngularFirestore, AngularFirestoreCollection } from 'angularfire2/firestore';
 import { Observable } from 'rxjs/Observable';
 import { AngularFireAuth } from 'angularfire2/auth';
@@ -18,21 +18,20 @@ import { AngularFireAuth } from 'angularfire2/auth';
 })
 export class MyCoursesPage {
 
-  myCoursesRef: AngularFirestoreCollection<any>;
-  myCourses: Observable<any[]>;
+  studentCoursesRef: AngularFirestoreCollection<any>;
+  studentCourses: Observable<any[]>; //Expecting single record
   private courses: any[];
 
   constructor(public navCtrl: NavController, private afs: AngularFirestore, afAuth: AngularFireAuth, public actionSheetCtrl: ActionSheetController) {
-    this.myCoursesRef = this.afs.collection<any>('student_courses', ref => ref.where('student_email', '==', afAuth.auth.currentUser.email));
-    this.myCourses = this.myCoursesRef.snapshotChanges().map(changes => {
+    this.studentCoursesRef = this.afs.collection<any>('student_courses', ref => ref.where('student_email', '==', afAuth.auth.currentUser.email).limit(1));
+    this.studentCourses = this.studentCoursesRef.snapshotChanges().map(changes => {
       return changes.map(c => {
         const data = c.payload.doc.data();
         const id = c.payload.doc.id;
         return { id, ...data }
       });
     });
-
-    this.myCourses.subscribe(data => {
+    this.studentCourses.subscribe(data => {
       data.map((value, index) => {
         this.courses = value['courses'];
       });
@@ -40,7 +39,7 @@ export class MyCoursesPage {
   }
 
   showOptions(myCourseId, course_name) {
-    let actionSheet  = this.actionSheetCtrl.create({
+    let actionSheet = this.actionSheetCtrl.create({
       title: '',
       buttons: [
         {
@@ -48,7 +47,7 @@ export class MyCoursesPage {
           role: 'destructive',
           handler: () => {
             this.courses.splice(this.courses.indexOf(course_name), 1);
-            this.myCoursesRef.doc(myCourseId).update({courses: this.courses});
+            this.studentCoursesRef.doc(myCourseId).update({courses: this.courses});
           }
         },
         {

@@ -23,7 +23,7 @@ export class MyApp {
         this.rootPage = HomePage;
         authObserver.unsubscribe();
       } else {
-        this.rootPage = 'LoginPage';
+        this.rootPage = LoginPage;
         authObserver.unsubscribe();
       }
     });
