@@ -20,10 +20,9 @@ export class MyCoursesPage {
 
   studentCoursesRef: AngularFirestoreCollection<any>;
   studentCourses: Observable<any[]>; //Expecting single record
-  private courses: any[];
 
-  constructor(public navCtrl: NavController, private afs: AngularFirestore, afAuth: AngularFireAuth, public actionSheetCtrl: ActionSheetController) {
-    this.studentCoursesRef = this.afs.collection<any>('student_courses', ref => ref.where('student_email', '==', afAuth.auth.currentUser.email).limit(1));
+  constructor(public navCtrl: NavController, private afs: AngularFirestore, private afAuth: AngularFireAuth, public actionSheetCtrl: ActionSheetController) {
+    this.studentCoursesRef = this.afs.collection<any>('student_courses', ref => ref.where('student_email', '==', afAuth.auth.currentUser.email));
     this.studentCourses = this.studentCoursesRef.snapshotChanges().map(changes => {
       return changes.map(c => {
         const data = c.payload.doc.data();
@@ -31,23 +30,17 @@ export class MyCoursesPage {
         return { id, ...data }
       });
     });
-    this.studentCourses.subscribe(data => {
-      data.map((value, index) => {
-        this.courses = value['courses'];
-      });
-    });
   }
 
-  showOptions(myCourseId, course_name) {
+  showOptions(studentCourseId, courseName) {
     let actionSheet = this.actionSheetCtrl.create({
       title: '',
       buttons: [
         {
-          text: 'Delete ' + course_name,
+          text: 'Delete ' + courseName,
           role: 'destructive',
           handler: () => {
-            this.courses.splice(this.courses.indexOf(course_name), 1);
-            this.studentCoursesRef.doc(myCourseId).update({courses: this.courses});
+            this.studentCoursesRef.doc(studentCourseId).delete();
           }
         },
         {
@@ -62,4 +55,7 @@ export class MyCoursesPage {
     actionSheet.present();
   }
 
+  enroll(courseName) {
+    this.studentCoursesRef.add({course_name: courseName, student_email: this.afAuth.auth.currentUser.email});
+  }
 }

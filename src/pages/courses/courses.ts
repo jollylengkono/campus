@@ -121,4 +121,7 @@ export class CoursesPage {
     prompt.present();
   }
 
+  enroll(courseName) {
+
+  }
 }

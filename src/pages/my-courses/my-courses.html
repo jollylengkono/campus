@@ -17,10 +17,8 @@
 
 <ion-content padding>
   <ion-list>
-    <div *ngFor="let studentCourse of studentCourses | async">
-      <ion-item *ngFor="let course_name of studentCourse.courses" (click)="showOptions(studentCourse.id, course_name)">
-        {{ course_name }}
-      </ion-item>
-    </div>
+    <ion-item *ngFor="let studentCourse of studentCourses | async" (click)="showOptions(studentCourse.id, studentCourse.course_name)">
+        {{ studentCourse.course_name }}
+    </ion-item>
   </ion-list>
 </ion-content>
