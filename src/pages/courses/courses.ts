@@ -3,6 +3,7 @@ import { NavController, AlertController, ActionSheetController } from 'ionic-ang
 import { AngularFirestore, AngularFirestoreCollection } from 'angularfire2/firestore';
 import { Observable } from 'rxjs/Observable';
 import { AuthProvider } from '../../providers/auth/auth';
+import { CourseProvider } from '../../providers/course/course';
 
 
 @Component({
@@ -15,7 +16,7 @@ export class CoursesPage {
   courses: Observable<any[]>;
 
   constructor(public navCtrl: NavController, public alertCtrl: AlertController,
-    public actionSheetCtrl: ActionSheetController, private afs: AngularFirestore, public authProvider: AuthProvider) {
+    public actionSheetCtrl: ActionSheetController, private afs: AngularFirestore, public authProvider: AuthProvider, private courseProvider: CourseProvider) {
     this.coursesRef = this.afs.collection<any>('courses');
     this.courses = this.coursesRef.snapshotChanges().map(changes => {
       return changes.map(c => {
@@ -122,6 +123,6 @@ export class CoursesPage {
   }
 
   enroll(courseName) {
-
+    this.courseProvider.enroll(courseName);
   }
 }

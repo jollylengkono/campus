@@ -3,6 +3,7 @@ import { IonicPage, NavController, ActionSheetController } from 'ionic-angular';
 import { AngularFirestore, AngularFirestoreCollection } from 'angularfire2/firestore';
 import { Observable } from 'rxjs/Observable';
 import { AngularFireAuth } from 'angularfire2/auth';
+import { CourseProvider } from '../../providers/course/course';
 
 /**
  * Generated class for the MyCoursesPage page.
@@ -18,11 +19,11 @@ import { AngularFireAuth } from 'angularfire2/auth';
 })
 export class MyCoursesPage {
 
-  studentCoursesRef: AngularFirestoreCollection<any>;
-  studentCourses: Observable<any[]>; //Expecting single record
+  private studentCoursesRef: AngularFirestoreCollection<any>;
+  private studentCourses: Observable<any[]>; //Expecting single record
 
-  constructor(public navCtrl: NavController, private afs: AngularFirestore, private afAuth: AngularFireAuth, public actionSheetCtrl: ActionSheetController) {
-    this.studentCoursesRef = this.afs.collection<any>('student_courses', ref => ref.where('student_email', '==', afAuth.auth.currentUser.email));
+  constructor(public navCtrl: NavController, private afs: AngularFirestore, private afAuth: AngularFireAuth, public actionSheetCtrl: ActionSheetController, private courseProvider: CourseProvider) {
+    this.studentCoursesRef = courseProvider.getStudentCoursesRef();
     this.studentCourses = this.studentCoursesRef.snapshotChanges().map(changes => {
       return changes.map(c => {
         const data = c.payload.doc.data();
@@ -53,9 +54,5 @@ export class MyCoursesPage {
       ]
     });
     actionSheet.present();
-  }
-
-  enroll(courseName) {
-    this.studentCoursesRef.add({course_name: courseName, student_email: this.afAuth.auth.currentUser.email});
   }
 }
