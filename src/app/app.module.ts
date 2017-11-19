@@ -16,6 +16,7 @@ import { AngularFireDatabaseModule, AngularFireDatabase } from 'angularfire2/dat
 import { AuthProvider } from '../providers/auth/auth';
 import { AngularFireAuthModule } from 'angularfire2/auth';
 import { CourseProvider } from '../providers/course/course';
+import { AvailableCoursesPage } from '../pages/available-courses/available-courses';
 
 export const firebaseConfig = {
   apiKey: "AIzaSyCe96GaTSsaVSyOYe_WIe-X2AoVNzNbxdg",
@@ -32,7 +33,8 @@ export const firebaseConfig = {
     HomePage,
     CoursesPage,
     MyCoursesPage,
-    LoginPage
+    LoginPage,
+    AvailableCoursesPage
   ],
   imports: [
     BrowserModule,
@@ -48,7 +50,8 @@ export const firebaseConfig = {
     HomePage,
     CoursesPage,
     MyCoursesPage,
-    LoginPage
+    LoginPage,
+    AvailableCoursesPage
   ],
   providers: [
     StatusBar,

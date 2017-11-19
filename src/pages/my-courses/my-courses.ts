@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, ActionSheetController } from 'ionic-angular';
+import { IonicPage, ActionSheetController } from 'ionic-angular';
 import { AngularFirestoreCollection } from 'angularfire2/firestore';
 import { Observable } from 'rxjs/Observable';
 import { CourseProvider } from '../../providers/course/course';
@@ -21,7 +21,7 @@ export class MyCoursesPage {
   private studentCoursesRef: AngularFirestoreCollection<any>;
   private studentCourses: Observable<any[]>; //Expecting single record
 
-  constructor(public navCtrl: NavController, public actionSheetCtrl: ActionSheetController, private courseProvider: CourseProvider) {
+  constructor(private actionSheetCtrl: ActionSheetController, private courseProvider: CourseProvider) {
     this.studentCoursesRef = this.courseProvider.getStudentCoursesRef();
     this.studentCourses = this.studentCoursesRef.snapshotChanges().map(changes => {
       return changes.map(c => {

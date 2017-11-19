@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore, AngularFirestoreCollection } from 'angularfire2/firestore';
-import { Observable } from 'rxjs/Observable';
 import { AngularFireAuth } from 'angularfire2/auth';
 
 /*
@@ -13,8 +12,15 @@ import { AngularFireAuth } from 'angularfire2/auth';
 export class CourseProvider {
 
   private studentCoursesRef: AngularFirestoreCollection<any>;
+  private availCoursesRef: AngularFirestoreCollection<any>;
+  private coursesRef: AngularFirestoreCollection<any>;
 
   constructor(private afs: AngularFirestore, private afAuth: AngularFireAuth) {
+  }
+
+  public getCoursesRef() {
+    this.coursesRef = this.afs.collection<any>('courses');
+    return this.coursesRef;
   }
 
   public getStudentCoursesRef(): AngularFirestoreCollection<any> {
@@ -22,8 +28,14 @@ export class CourseProvider {
     return this.studentCoursesRef;
   }
 
-  public enroll(courseName) {
-    this.studentCoursesRef.add({course_name: courseName, student_email: this.afAuth.auth.currentUser.email});
+  public getAvailCoursesRef() {
+    this.availCoursesRef = this.afs.collection<any>('available_courses', ref => ref.where('student_email', '==', this.afAuth.auth.currentUser.email));
+    return this.availCoursesRef;
+  }
+
+  public enroll(availCourseId, courseName) {
+    this.getStudentCoursesRef().add({course_name: courseName, student_email: this.afAuth.auth.currentUser.email});
+    this.availCoursesRef.doc(availCourseId).delete();
   }
 
 }

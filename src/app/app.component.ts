@@ -9,6 +9,7 @@ import { AngularFireAuth } from 'angularfire2/auth';
 import { AuthProvider } from '../providers/auth/auth';
 import { LoginPage } from '../pages/login/login';
 import { MyCoursesPage } from '../pages/my-courses/my-courses';
+import { AvailableCoursesPage } from '../pages/available-courses/available-courses';
 
 @Component({
   templateUrl: 'app.html'
@@ -44,6 +45,11 @@ export class MyApp {
   goToMyCourses(params){
     if (!params) params = {};
     this.navCtrl.setRoot(MyCoursesPage);
+  }
+
+  goToAvailableCourses(params) {
+    if (!params) params = {};
+    this.navCtrl.setRoot(AvailableCoursesPage);
   }
 
   goToCourses(params){

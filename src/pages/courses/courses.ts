@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { NavController, AlertController, ActionSheetController } from 'ionic-angular';
-import { AngularFirestore, AngularFirestoreCollection } from 'angularfire2/firestore';
+import { AngularFirestoreCollection } from 'angularfire2/firestore';
 import { Observable } from 'rxjs/Observable';
 import { AuthProvider } from '../../providers/auth/auth';
 import { CourseProvider } from '../../providers/course/course';
@@ -12,12 +12,12 @@ import { CourseProvider } from '../../providers/course/course';
 })
 export class CoursesPage {
 
-  coursesRef: AngularFirestoreCollection<any>;
-  courses: Observable<any[]>;
+  private coursesRef: AngularFirestoreCollection<any>;
+  private courses: Observable<any[]>;
 
   constructor(public navCtrl: NavController, public alertCtrl: AlertController,
-    public actionSheetCtrl: ActionSheetController, private afs: AngularFirestore, public authProvider: AuthProvider, private courseProvider: CourseProvider) {
-    this.coursesRef = this.afs.collection<any>('courses');
+    public actionSheetCtrl: ActionSheetController, public authProvider: AuthProvider, private courseProvider: CourseProvider) {
+    this.coursesRef = this.courseProvider.getCoursesRef();
     this.courses = this.coursesRef.snapshotChanges().map(changes => {
       return changes.map(c => {
         const data = c.payload.doc.data();
@@ -120,9 +120,5 @@ export class CoursesPage {
       ]
     });
     prompt.present();
-  }
-
-  enroll(courseName) {
-    this.courseProvider.enroll(courseName);
   }
 }
