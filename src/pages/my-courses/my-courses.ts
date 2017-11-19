@@ -19,7 +19,7 @@ import { CourseProvider } from '../../providers/course/course';
 export class MyCoursesPage {
 
   private studentCoursesRef: AngularFirestoreCollection<any>;
-  private studentCourses: Observable<any[]>; //Expecting single record
+  private studentCourses: Observable<any[]>;
 
   constructor(private actionSheetCtrl: ActionSheetController, private courseProvider: CourseProvider) {
     this.studentCoursesRef = this.courseProvider.getStudentCoursesRef();
@@ -41,6 +41,7 @@ export class MyCoursesPage {
           role: 'destructive',
           handler: () => {
             this.studentCoursesRef.doc(studentCourseId).delete();
+            this.courseProvider.disenroll(courseName);
           }
         },
         {

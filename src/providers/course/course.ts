@@ -38,4 +38,8 @@ export class CourseProvider {
     this.availCoursesRef.doc(availCourseId).delete();
   }
 
+  public disenroll(courseTitle) {
+    this.getAvailCoursesRef().add({course_title: courseTitle, student_email: this.afAuth.auth.currentUser.email});
+  }
+
 }
