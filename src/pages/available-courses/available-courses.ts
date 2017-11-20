@@ -62,6 +62,7 @@ export class AvailableCoursesPage {
   }
 
   enroll(availCourseId, courseName) {
-    this.courseProvider.enroll(availCourseId, courseName);
+    this.availCoursesRef.doc(availCourseId).delete();
+    this.courseProvider.enroll(courseName);    
   }
 }

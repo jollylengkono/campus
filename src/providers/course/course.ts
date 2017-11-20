@@ -33,9 +33,8 @@ export class CourseProvider {
     return this.availCoursesRef;
   }
 
-  public enroll(availCourseId, courseName) {
+  public enroll(courseName) {
     this.getStudentCoursesRef().add({course_name: courseName, student_email: this.afAuth.auth.currentUser.email});
-    this.availCoursesRef.doc(availCourseId).delete();
   }
 
   public disenroll(courseTitle) {
