@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { CourseProvider } from '../../providers/course/course';
-import { AngularFirestoreCollection } from 'angularfire2/firestore';
 import { Observable } from 'rxjs/Observable';
 import { AngularFireAuth } from 'angularfire2/auth';
 
@@ -19,24 +18,20 @@ import { AngularFireAuth } from 'angularfire2/auth';
 })
 export class AvailableCoursesPage {
 
-  private coursesRef: AngularFirestoreCollection<any>;
-  private availCoursesRef: AngularFirestoreCollection<any>;
   private availCourses: Observable<any[]>;
 
   constructor(public navCtrl: NavController, public navParams: NavParams, private courseProvider: CourseProvider, private afAuth: AngularFireAuth) {
-    this.checkAvailCourses();
-  }
-
-  checkAvailCourses() {
-    this.availCoursesRef = this.courseProvider.getAvailCoursesRef();
-    this.availCourses = this.availCoursesRef.snapshotChanges().map(changes => {
+    this.availCourses = this.courseProvider.getAvailCoursesRef().snapshotChanges().map(changes => {
       return changes.map(c => {
         const data = c.payload.doc.data();
         const id = c.payload.doc.id;
         return { id, ...data }
       });
     });
+    this.checkAvailCourses();
+  }
 
+  checkAvailCourses() {
     this.availCourses.subscribe(course => {
         if (course.length == 0) {
           this.generateAvailableCourses();
@@ -45,8 +40,7 @@ export class AvailableCoursesPage {
   }
 
   generateAvailableCourses() {
-    this.coursesRef = this.courseProvider.getCoursesRef();
-    var courses = this.coursesRef.snapshotChanges().map(changes => {
+    var courses = this.courseProvider.getCoursesRef().snapshotChanges().map(changes => {
       return changes.map(c => {
         const data = c.payload.doc.data();
         const id = c.payload.doc.id;
@@ -56,13 +50,13 @@ export class AvailableCoursesPage {
 
     courses.subscribe(course => {
       course.map((value, index) => {
-        this.availCoursesRef.add({student_email: this.afAuth.auth.currentUser.email, course_title: value['title']});
+        this.courseProvider.getAvailCoursesRef().add({student_email: this.afAuth.auth.currentUser.email, course_title: value['title']});
       });
     });
   }
 
   enroll(availCourseId, courseName) {
-    this.availCoursesRef.doc(availCourseId).delete();
+    this.courseProvider.getAvailCoursesRef().doc(availCourseId).delete();
     this.courseProvider.enroll(courseName);    
   }
 }

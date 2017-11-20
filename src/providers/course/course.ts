@@ -16,29 +16,41 @@ export class CourseProvider {
   private coursesRef: AngularFirestoreCollection<any>;
 
   constructor(private afs: AngularFirestore, private afAuth: AngularFireAuth) {
+    this.createCoursesRef();
+    this.createStudentCoursesRef();
+    this.createAvailCoursesRef();
   }
 
-  public getCoursesRef() {
+  private createCoursesRef() {
     this.coursesRef = this.afs.collection<any>('courses');
+  }
+
+  private createStudentCoursesRef() {
+    this.studentCoursesRef = this.afs.collection<any>('student_courses', ref => ref.where('student_email', '==', this.afAuth.auth.currentUser.email));
+  }
+
+  private createAvailCoursesRef() {
+    this.availCoursesRef = this.afs.collection<any>('available_courses', ref => ref.where('student_email', '==', this.afAuth.auth.currentUser.email));
+  }  
+
+  public getCoursesRef() {    
     return this.coursesRef;
   }
 
-  public getStudentCoursesRef(): AngularFirestoreCollection<any> {
-    this.studentCoursesRef = this.afs.collection<any>('student_courses', ref => ref.where('student_email', '==', this.afAuth.auth.currentUser.email));
+  public getStudentCoursesRef() {
     return this.studentCoursesRef;
   }
 
   public getAvailCoursesRef() {
-    this.availCoursesRef = this.afs.collection<any>('available_courses', ref => ref.where('student_email', '==', this.afAuth.auth.currentUser.email));
     return this.availCoursesRef;
   }
 
   public enroll(courseName) {
-    this.getStudentCoursesRef().add({course_name: courseName, student_email: this.afAuth.auth.currentUser.email});
+    this.studentCoursesRef.add({course_name: courseName, student_email: this.afAuth.auth.currentUser.email});
   }
 
   public disenroll(courseTitle) {
-    this.getAvailCoursesRef().add({course_title: courseTitle, student_email: this.afAuth.auth.currentUser.email});
+    this.availCoursesRef.add({course_title: courseTitle, student_email: this.afAuth.auth.currentUser.email});
   }
 
 }

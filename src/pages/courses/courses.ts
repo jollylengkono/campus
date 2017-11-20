@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
 import { NavController, AlertController, ActionSheetController } from 'ionic-angular';
-import { AngularFirestoreCollection } from 'angularfire2/firestore';
 import { Observable } from 'rxjs/Observable';
 import { AuthProvider } from '../../providers/auth/auth';
 import { CourseProvider } from '../../providers/course/course';
@@ -12,13 +11,12 @@ import { CourseProvider } from '../../providers/course/course';
 })
 export class CoursesPage {
 
-  private coursesRef: AngularFirestoreCollection<any>;
+  //private coursesRef: AngularFirestoreCollection<any>;
   private courses: Observable<any[]>;
 
   constructor(public navCtrl: NavController, public alertCtrl: AlertController,
     public actionSheetCtrl: ActionSheetController, public authProvider: AuthProvider, private courseProvider: CourseProvider) {
-    this.coursesRef = this.courseProvider.getCoursesRef();
-    this.courses = this.coursesRef.snapshotChanges().map(changes => {
+    this.courses = this.courseProvider.getCoursesRef().snapshotChanges().map(changes => {
       return changes.map(c => {
         const data = c.payload.doc.data();
         const id = c.payload.doc.id;
@@ -51,7 +49,7 @@ export class CoursesPage {
         {
           text: 'Save',
           handler: data => {
-            this.coursesRef.add({course_id: data.course_id, title: data.title});
+            this.courseProvider.getCoursesRef().add({course_id: data.course_id, title: data.title});
           }
         }
       ]
@@ -67,7 +65,7 @@ export class CoursesPage {
           text: 'Delete Course',
           role: 'destructive',
           handler: () => {
-            this.coursesRef.doc(docId).delete();
+            this.courseProvider.getCoursesRef().doc(docId).delete();
           }
         },
         {
@@ -114,7 +112,7 @@ export class CoursesPage {
         {
           text: 'Save',
           handler: data => {
-            this.coursesRef.doc(docId).update({title: data.title});
+            this.courseProvider.getCoursesRef().doc(docId).update({title: data.title});
           }
         }
       ]

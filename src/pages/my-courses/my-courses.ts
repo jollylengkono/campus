@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
 import { IonicPage, ActionSheetController } from 'ionic-angular';
-import { AngularFirestoreCollection } from 'angularfire2/firestore';
 import { Observable } from 'rxjs/Observable';
 import { CourseProvider } from '../../providers/course/course';
 
@@ -18,12 +17,10 @@ import { CourseProvider } from '../../providers/course/course';
 })
 export class MyCoursesPage {
 
-  private studentCoursesRef: AngularFirestoreCollection<any>;
   private studentCourses: Observable<any[]>;
 
   constructor(private actionSheetCtrl: ActionSheetController, private courseProvider: CourseProvider) {
-    this.studentCoursesRef = this.courseProvider.getStudentCoursesRef();
-    this.studentCourses = this.studentCoursesRef.snapshotChanges().map(changes => {
+    this.studentCourses = this.courseProvider.getStudentCoursesRef().snapshotChanges().map(changes => {
       return changes.map(c => {
         const data = c.payload.doc.data();
         const id = c.payload.doc.id;
@@ -40,7 +37,7 @@ export class MyCoursesPage {
           text: 'Delete ' + courseName,
           role: 'destructive',
           handler: () => {
-            this.studentCoursesRef.doc(studentCourseId).delete();
+            this.courseProvider.getStudentCoursesRef().doc(studentCourseId).delete();
             this.courseProvider.disenroll(courseName);
           }
         },
