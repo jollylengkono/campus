@@ -28,17 +28,11 @@ export class AvailableCoursesPage {
         return { id, ...data }
       });
     });
-    this.checkAvailCourses();
   }
 
-  checkAvailCourses() {
-    this.availCourses.subscribe(course => {
-        if (course.length == 0) {
-          this.generateAvailableCourses();
-        }
-    });
-  }
-
+  /**
+   * Not used for now
+   */
   generateAvailableCourses() {
     var courses = this.courseProvider.getCoursesRef().snapshotChanges().map(changes => {
       return changes.map(c => {
