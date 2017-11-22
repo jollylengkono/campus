@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, OnDestroy } from '@angular/core';
 import { AngularFirestore, AngularFirestoreCollection } from 'angularfire2/firestore';
 import { AngularFireAuth } from 'angularfire2/auth';
 
@@ -9,8 +9,8 @@ import { AngularFireAuth } from 'angularfire2/auth';
   and Angular DI.
 */
 @Injectable()
-export class CourseProvider {
-
+export class CourseProvider implements OnDestroy {
+  
   private studentCoursesRef: AngularFirestoreCollection<any>;
   private availCoursesRef: AngularFirestoreCollection<any>;
   private coursesRef: AngularFirestoreCollection<any>;
@@ -53,4 +53,7 @@ export class CourseProvider {
     this.availCoursesRef.add({course_title: courseTitle, student_email: this.afAuth.auth.currentUser.email});
   }
 
+  ngOnDestroy(): void {
+
+  }
 }

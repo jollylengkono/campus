@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { CourseProvider } from '../../providers/course/course';
 import { Observable } from 'rxjs/Observable';
@@ -16,8 +16,8 @@ import { AngularFireAuth } from 'angularfire2/auth';
   selector: 'page-available-courses',
   templateUrl: 'available-courses.html',
 })
-export class AvailableCoursesPage {
-
+export class AvailableCoursesPage implements OnDestroy {
+  
   private availCourses: Observable<any[]>;
 
   constructor(public navCtrl: NavController, public navParams: NavParams, private courseProvider: CourseProvider, private afAuth: AngularFireAuth) {
@@ -51,6 +51,10 @@ export class AvailableCoursesPage {
 
   enroll(availCourseId, courseName) {
     this.courseProvider.getAvailCoursesRef().doc(availCourseId).delete();
-    this.courseProvider.enroll(courseName);    
+    this.courseProvider.enroll(courseName);
+  }
+
+  ngOnDestroy(): void {
+
   }
 }
