@@ -21,7 +21,7 @@ export class AvailableCoursesPage implements OnDestroy {
   private availCourses: Observable<any[]>;
 
   constructor(public navCtrl: NavController, public navParams: NavParams, private courseProvider: CourseProvider, private afAuth: AngularFireAuth) {
-    this.availCourses = this.courseProvider.getAvailCoursesRef().snapshotChanges().map(changes => {
+    this.availCourses = this.courseProvider.availCoursesRef().snapshotChanges().map(changes => {
       return changes.map(c => {
         const data = c.payload.doc.data();
         const id = c.payload.doc.id;
@@ -34,7 +34,7 @@ export class AvailableCoursesPage implements OnDestroy {
    * Not used for now
    */
   generateAvailableCourses() {
-    var courses = this.courseProvider.getCoursesRef().snapshotChanges().map(changes => {
+    var courses = this.courseProvider.coursesRef().snapshotChanges().map(changes => {
       return changes.map(c => {
         const data = c.payload.doc.data();
         const id = c.payload.doc.id;
@@ -44,13 +44,13 @@ export class AvailableCoursesPage implements OnDestroy {
 
     courses.subscribe(course => {
       course.map((value, index) => {
-        this.courseProvider.getAvailCoursesRef().add({student_email: this.afAuth.auth.currentUser.email, course_title: value['title']});
+        this.courseProvider.availCoursesRef().add({student_email: this.afAuth.auth.currentUser.email, course_title: value['title']});
       });
     });
   }
 
   enroll(availCourseId, courseName) {
-    this.courseProvider.getAvailCoursesRef().doc(availCourseId).delete();
+    this.courseProvider.availCoursesRef().doc(availCourseId).delete();
     this.courseProvider.enroll(courseName);
   }
 

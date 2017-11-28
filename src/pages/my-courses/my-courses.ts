@@ -20,7 +20,7 @@ export class MyCoursesPage {
   private studentCourses: Observable<any[]>;
 
   constructor(private actionSheetCtrl: ActionSheetController, private courseProvider: CourseProvider) {
-    this.studentCourses = this.courseProvider.getStudentCoursesRef().snapshotChanges().map(changes => {
+    this.studentCourses = this.courseProvider.studentCoursesRef().snapshotChanges().map(changes => {
       return changes.map(c => {
         const data = c.payload.doc.data();
         const id = c.payload.doc.id;
@@ -37,7 +37,7 @@ export class MyCoursesPage {
           text: 'Delete ' + courseName,
           role: 'destructive',
           handler: () => {
-            this.courseProvider.getStudentCoursesRef().doc(studentCourseId).delete();
+            this.courseProvider.studentCoursesRef().doc(studentCourseId).delete();
             this.courseProvider.disenroll(courseName);
           }
         },

@@ -11,12 +11,11 @@ import { CourseProvider } from '../../providers/course/course';
 })
 export class CoursesPage {
 
-  //private coursesRef: AngularFirestoreCollection<any>;
   private courses: Observable<any[]>;
 
   constructor(public navCtrl: NavController, public alertCtrl: AlertController,
     public actionSheetCtrl: ActionSheetController, public authProvider: AuthProvider, private courseProvider: CourseProvider) {
-    this.courses = this.courseProvider.getCoursesRef().snapshotChanges().map(changes => {
+    this.courses = this.courseProvider.coursesRef().snapshotChanges().map(changes => {
       return changes.map(c => {
         const data = c.payload.doc.data();
         const id = c.payload.doc.id;
@@ -49,7 +48,7 @@ export class CoursesPage {
         {
           text: 'Save',
           handler: data => {
-            this.courseProvider.getCoursesRef().add({course_id: data.course_id, title: data.title});
+            this.courseProvider.coursesRef().add({course_id: data.course_id, title: data.title});
           }
         }
       ]
@@ -65,7 +64,7 @@ export class CoursesPage {
           text: 'Delete Course',
           role: 'destructive',
           handler: () => {
-            this.courseProvider.getCoursesRef().doc(docId).delete();
+            this.courseProvider.coursesRef().doc(docId).delete();
           }
         },
         {
@@ -112,7 +111,7 @@ export class CoursesPage {
         {
           text: 'Save',
           handler: data => {
-            this.courseProvider.getCoursesRef().doc(docId).update({title: data.title});
+            this.courseProvider.coursesRef().doc(docId).update({title: data.title});
           }
         }
       ]
